@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 2600" width="1600" height="2600">
+  <defs>
+    <style>
+      .lifeline { stroke: #666; stroke-width: 2; stroke-dasharray: 5,5; }
+      .actor-box { fill: #e3f2fd; stroke: #1976d2; stroke-width: 2; }
+      .message { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .return-message { stroke: #666; stroke-width: 1.5; fill: none; stroke-dasharray: 4,4; marker-end: url(#arrowhead-return); }
+      .self-message { stroke: #d32f2f; stroke-width: 2; fill: none; marker-end: url(#arrowhead-self); }
+      .activation { fill: #fff9c4; stroke: #f57f17; stroke-width: 1.5; }
+      .title-text { font: bold 18px sans-serif; fill: #000; }
+      .actor-text { font: bold 14px sans-serif; fill: #000; text-anchor: middle; }
+      .message-text { font: 11px monospace; fill: #000; }
+      .note-box { fill: #fff3e0; stroke: #f57c00; stroke-width: 1; }
+      .note-text { font: 10px sans-serif; fill: #000; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333" />
+    </marker>
+    <marker id="arrowhead-return" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#666" />
+    </marker>
+    <marker id="arrowhead-self" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#d32f2f" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="800" y="30" text-anchor="middle" class="title-text">Apache Guacamole - SSH Connection Establishment Sequence</text>
+  <text x="800" y="50" text-anchor="middle" class="note-text">From user click to terminal display</text>
+
+  <!-- Actors -->
+  <rect x="50" y="70" width="100" height="40" class="actor-box" rx="5"/>
+  <text x="100" y="95" class="actor-text">Browser</text>
+
+  <rect x="250" y="70" width="140" height="40" class="actor-box" rx="5"/>
+  <text x="320" y="88" class="actor-text">Java Backend</text>
+  <text x="320" y="102" class="note-text">(Tomcat)</text>
+
+  <rect x="490" y="70" width="100" height="40" class="actor-box" rx="5"/>
+  <text x="540" y="95" class="actor-text">guacd</text>
+
+  <rect x="690" y="70" width="120" height="40" class="actor-box" rx="5"/>
+  <text x="750" y="88" class="actor-text">SSH Plugin</text>
+  <text x="750" y="102" class="note-text">(Process)</text>
+
+  <rect x="910" y="70" width="100" height="40" class="actor-box" rx="5"/>
+  <text x="960" y="88" class="actor-text">Terminal</text>
+  <text x="960" y="102" class="note-text">Emulator</text>
+
+  <rect x="1110" y="70" width="110" height="40" class="actor-box" rx="5"/>
+  <text x="1165" y="88" class="actor-text">SSH Server</text>
+  <text x="1165" y="102" class="note-text">192.168.1.10</text>
+
+  <!-- Lifelines -->
+  <line x1="100" y1="110" x2="100" y2="2550" class="lifeline"/>
+  <line x1="320" y1="110" x2="320" y2="2550" class="lifeline"/>
+  <line x1="540" y1="110" x2="540" y2="2550" class="lifeline"/>
+  <line x1="750" y1="110" x2="750" y2="2550" class="lifeline"/>
+  <line x1="960" y1="110" x2="960" y2="2550" class="lifeline"/>
+  <line x1="1165" y1="110" x2="1165" y2="2550" class="lifeline"/>
+
+  <!-- Phase 1: User Interaction -->
+  <rect x="10" y="130" width="200" height="20" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="15" y="145" class="note-text" font-weight="bold">Phase 1: User Selection</text>
+
+  <path d="M 100,160 L 100,170 L 120,170 L 120,185 L 100,185" class="self-message"/>
+  <text x="135" y="178" class="message-text">User clicks SSH connection</text>
+
+  <path d="M 100,200 L 320,210" class="message"/>
+  <text x="150" y="215" class="message-text">GET /api/session/data/.../connections/5</text>
+  <rect x="310" y="210" width="20" height="30" class="activation"/>
+
+  <path d="M 320,240 L 100,250" class="return-message"/>
+  <text x="150" y="255" class="message-text">Connection config (hostname, port, etc.)</text>
+
+  <!-- Phase 2: WebSocket Connection -->
+  <rect x="10" y="280" width="250" height="20" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="15" y="295" class="note-text" font-weight="bold">Phase 2: WebSocket Establishment</text>
+
+  <path d="M 100,310 L 100,320 L 120,320 L 120,340 L 100,340" class="self-message"/>
+  <text x="135" y="330" class="message-text">new Guacamole.Client(tunnel)</text>
+
+  <path d="M 100,360 L 320,370" class="message"/>
+  <text x="110" y="375" class="message-text">WebSocket: ws://host/websocket-tunnel?token=X&GUAC_ID=5</text>
+  <text x="110" y="390" class="note-text">File: Tunnel.js:991</text>
+  <rect x="310" y="370" width="20" height="550" class="activation"/>
+
+  <rect x="400" y="410" width="350" height="50" class="note-box"/>
+  <text x="410" y="425" class="note-text">WebSocket Handler:</text>
+  <text x="410" y="440" class="note-text">RestrictedGuacamoleWebSocketTunnelEndpoint.java:97</text>
+  <text x="410" y="455" class="note-text">→ TunnelRequestService.createTunnel()</text>
+
+  <!-- Phase 3: Connection to guacd -->
+  <rect x="10" y="480" width="280" height="20" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="15" y="495" class="note-text" font-weight="bold">Phase 3: Java → guacd TCP Connection</text>
+
+  <path d="M 320,510 L 540,520" class="message"/>
+  <text x="330" y="525" class="message-text">TCP connect to localhost:4822</text>
+  <text x="330" y="540" class="note-text">File: InetGuacamoleSocket.java:100</text>
+  <rect x="530" y="520" width="20" height="1250" class="activation"/>
+
+  <!-- Phase 4: Guacamole Protocol Handshake -->
+  <rect x="10" y="560" width="330" height="20" fill="#fff3e0" stroke="#f57c00"/>
+  <text x="15" y="575" class="note-text" font-weight="bold">Phase 4: Guacamole Protocol Handshake</text>
+
+  <path d="M 320,590 L 540,600" class="message"/>
+  <text x="330" y="605" class="message-text">select,ssh;</text>
+  <text x="330" y="620" class="note-text">ConfiguredGuacamoleSocket.java:220</text>
+
+  <path d="M 540,630 L 540,640 L 560,640 L 560,660 L 540,660" class="self-message"/>
+  <text x="575" y="650" class="message-text">Parse protocol "ssh"</text>
+  <text x="575" y="665" class="note-text">connection.c:249</text>
+
+  <path d="M 540,680 L 320,690" class="return-message"/>
+  <text x="330" y="695" class="message-text">args,VERSION_1_5_0,hostname,port,username,...</text>
+  <text x="330" y="710" class="note-text">Request parameters from client</text>
+
+  <path d="M 320,730 L 540,740" class="message"/>
+  <text x="330" y="745" class="message-text">size,1920,1080,96;</text>
+
+  <path d="M 320,760 L 540,770" class="message"/>
+  <text x="330" y="775" class="message-text">audio,audio/L16,audio/L8,...;</text>
+
+  <path d="M 320,790 L 540,800" class="message"/>
+  <text x="330" y="805" class="message-text">video,video/webm,...;</text>
+
+  <path d="M 320,820 L 540,830" class="message"/>
+  <text x="330" y="835" class="message-text">image,image/png,image/jpeg,...;</text>
+
+  <path d="M 320,850 L 540,860" class="message"/>
+  <text x="330" y="865" class="message-text">connect,192.168.1.10,22,admin,secret,monospace,12,...</text>
+  <text x="330" y="880" class="note-text">All SSH connection parameters</text>
+
+  <!-- Phase 5: Process Creation -->
+  <rect x="10" y="900" width="280" height="20" fill="#fff3e0" stroke="#f57c00"/>
+  <text x="15" y="915" class="note-text" font-weight="bold">Phase 5: Fork Process & Load Plugin</text>
+
+  <path d="M 540,930 L 540,940 L 560,940 L 560,970 L 540,970" class="self-message"/>
+  <text x="575" y="950" class="message-text">fork() new process</text>
+  <text x="575" y="965" class="note-text">proc.c:303</text>
+
+  <path d="M 540,990 L 750,1000" class="message"/>
+  <text x="550" y="1005" class="message-text">Load libguac-client-ssh.so</text>
+  <text x="550" y="1020" class="note-text">proc.c:338 - guac_client_load_plugin()</text>
+  <rect x="740" y="1000" width="20" height="1100" class="activation"/>
+
+  <path d="M 750,1030 L 750,1040 L 770,1040 L 770,1065 L 750,1065" class="self-message"/>
+  <text x="785" y="1050" class="message-text">guac_client_init()</text>
+  <text x="785" y="1065" class="note-text">client.c:66</text>
+
+  <!-- Phase 6: User Join -->
+  <rect x="10" y="1085" width="250" height="20" fill="#fff3e0" stroke="#f57c00"/>
+  <text x="15" y="1100" class="note-text" font-weight="bold">Phase 6: User Join Handler</text>
+
+  <path d="M 540,1120 L 750,1130" class="message"/>
+  <text x="550" y="1135" class="message-text">guacd_user_thread(owner=TRUE)</text>
+  <text x="550" y="1150" class="note-text">proc.c:81-99</text>
+
+  <path d="M 750,1160 L 750,1170 L 770,1170 L 770,1200 L 750,1200" class="self-message"/>
+  <text x="785" y="1180" class="message-text">guac_ssh_user_join_handler()</text>
+  <text x="785" y="1195" class="note-text">user.c:40</text>
+
+  <rect x="800" y="1215" width="400" height="50" class="note-box"/>
+  <text x="810" y="1230" class="note-text">Set handlers: key_handler, mouse_handler, size_handler</text>
+  <text x="810" y="1245" class="note-text">If owner: Start ssh_client_thread()</text>
+  <text x="810" y="1260" class="note-text">File: user.c:66-79</text>
+
+  <!-- Phase 7: SSH Connection -->
+  <rect x="10" y="1280" width="300" height="20" fill="#e1f5fe" stroke="#0277bd"/>
+  <text x="15" y="1295" class="note-text" font-weight="bold">Phase 7: SSH Client Thread (Main Logic)</text>
+
+  <path d="M 750,1310 L 750,1320 L 770,1320 L 770,1345 L 750,1345" class="self-message"/>
+  <text x="785" y="1330" class="message-text">ssh_client_thread() starts</text>
+  <text x="785" y="1345" class="note-text">ssh.c:226</text>
+
+  <path d="M 750,1365 L 960,1375" class="message"/>
+  <text x="760" y="1380" class="message-text">guac_terminal_create()</text>
+  <text x="760" y="1395" class="note-text">ssh.c:308 - Create terminal emulator</text>
+  <rect x="950" y="1375" width="20" height="1050" class="activation"/>
+
+  <path d="M 960,1405 L 960,1415 L 980,1415 L 980,1445 L 960,1445" class="self-message"/>
+  <text x="995" y="1425" class="message-text">Initialize VT102 emulator</text>
+  <text x="995" y="1440" class="note-text">terminal.c - Buffer, display</text>
+
+  <path d="M 750,1465 L 750,1475 L 770,1475 L 770,1510 L 750,1510" class="self-message"/>
+  <text x="785" y="1485" class="message-text">guac_ssh_get_user()</text>
+  <text x="785" y="1500" class="note-text">ssh.c:315 - Get credentials</text>
+
+  <path d="M 750,1530 L 1165,1550" class="message"/>
+  <text x="760" y="1555" class="message-text">TCP connect to 192.168.1.10:22</text>
+  <text x="760" y="1570" class="note-text">ssh.c:320 - guac_common_ssh_create_session()</text>
+  <rect x="1155" y="1550" width="20" height="850" class="activation"/>
+
+  <path d="M 1165,1590 L 750,1600" class="return-message"/>
+  <text x="840" y="1605" class="message-text">TCP connection established</text>
+
+  <path d="M 750,1620 L 1165,1630" class="message"/>
+  <text x="760" y="1635" class="message-text">SSH handshake (version exchange)</text>
+
+  <path d="M 1165,1650 L 750,1660" class="return-message"/>
+  <text x="840" y="1665" class="message-text">Server version, algorithms</text>
+
+  <path d="M 750,1680 L 1165,1690" class="message"/>
+  <text x="760" y="1695" class="message-text">Key exchange (Diffie-Hellman)</text>
+
+  <path d="M 1165,1710 L 750,1720" class="return-message"/>
+  <text x="840" y="1725" class="message-text">Server public key</text>
+
+  <path d="M 750,1740 L 1165,1750" class="message"/>
+  <text x="760" y="1755" class="message-text">Authentication request (password/key)</text>
+  <text x="760" y="1770" class="note-text">ssh.c:340 - guac_common_ssh_authenticate()</text>
+
+  <path d="M 1165,1780 L 750,1790" class="return-message"/>
+  <text x="840" y="1795" class="message-text">Authentication success</text>
+
+  <path d="M 750,1810 L 1165,1820" class="message"/>
+  <text x="760" y="1825" class="message-text">Open session channel</text>
+  <text x="760" y="1840" class="note-text">ssh.c:347 - libssh2_channel_open_session()</text>
+
+  <path d="M 1165,1850 L 750,1860" class="return-message"/>
+  <text x="840" y="1865" class="message-text">Channel opened</text>
+
+  <path d="M 750,1880 L 1165,1890" class="message"/>
+  <text x="760" y="1895" class="message-text">Request PTY (pseudo-terminal)</text>
+  <text x="760" y="1910" class="note-text">ssh.c:353 - libssh2_channel_request_pty_ex()</text>
+  <text x="760" y="1925" class="note-text">Type: "linux", Size: 1920x1080</text>
+
+  <path d="M 1165,1940 L 750,1950" class="return-message"/>
+  <text x="840" y="1955" class="message-text">PTY allocated</text>
+
+  <path d="M 750,1970 L 1165,1980" class="message"/>
+  <text x="760" y="1985" class="message-text">Request shell</text>
+  <text x="760" y="2000" class="note-text">ssh.c:370 - libssh2_channel_shell()</text>
+
+  <path d="M 1165,2010 L 750,2020" class="return-message"/>
+  <text x="840" y="2025" class="message-text">Shell started (bash/zsh)</text>
+
+  <path d="M 1165,2040 L 750,2050" class="return-message"/>
+  <text x="840" y="2055" class="message-text">Initial output: "admin@server:~$ "</text>
+
+  <path d="M 750,2070 L 960,2080" class="message"/>
+  <text x="760" y="2085" class="message-text">guac_terminal_write(buffer)</text>
+  <text x="760" y="2100" class="note-text">ssh.c:378 - Main loop reading from SSH</text>
+
+  <path d="M 960,2110 L 960,2120 L 980,2120 L 980,2160 L 960,2160" class="self-message"/>
+  <text x="995" y="2135" class="message-text">Parse VT sequences</text>
+  <text x="995" y="2150" class="note-text">Render with Pango/Cairo</text>
+
+  <path d="M 960,2180 L 750,2190" class="return-message"/>
+  <text x="840" y="2195" class="message-text">Guacamole instructions (png, size, ...)</text>
+
+  <!-- Phase 8: Ready Signal -->
+  <rect x="10" y="2210" width="250" height="20" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="15" y="2225" class="note-text" font-weight="bold">Phase 8: Connection Ready</text>
+
+  <path d="M 540,2245 L 320,2255" class="return-message"/>
+  <text x="330" y="2260" class="message-text">ready,$a5b2c3d4-e5f6-7890-abcd-ef1234567890;</text>
+  <text x="330" y="2275" class="note-text">Connection ID assigned</text>
+
+  <path d="M 320,2295 L 100,2305" class="return-message"/>
+  <text x="130" y="2310" class="message-text">WebSocket: ready instruction</text>
+
+  <!-- Phase 9: Display -->
+  <rect x="10" y="2325" width="250" height="20" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="15" y="2340" class="note-text" font-weight="bold">Phase 9: Terminal Display</text>
+
+  <path d="M 540,2360 L 320,2370" class="return-message"/>
+  <text x="330" y="2375" class="message-text">size,0,1920,1080;</text>
+
+  <path d="M 320,2390 L 100,2400" class="return-message"/>
+  <text x="130" y="2405" class="message-text">WebSocket forward</text>
+
+  <path d="M 540,2420 L 320,2430" class="return-message"/>
+  <text x="330" y="2435" class="message-text">png,0,0,0,iVBORw0KGgoAAAANSUh...;</text>
+  <text x="330" y="2450" class="note-text">Base64-encoded terminal image</text>
+
+  <path d="M 320,2470 L 100,2480" class="return-message"/>
+  <text x="130" y="2485" class="message-text">WebSocket forward</text>
+
+  <path d="M 100,2500 L 100,2510 L 120,2510 L 120,2535 L 100,2535" class="self-message"/>
+  <text x="135" y="2520" class="message-text">Draw PNG to HTML5 Canvas</text>
+  <text x="135" y="2535" class="note-text">Display.js - User sees terminal!</text>
+
+  <!-- Legend -->
+  <rect x="1280" y="130" width="280" height="180" fill="#f5f5f5" stroke="#333" stroke-width="1"/>
+  <text x="1290" y="150" class="note-text" font-weight="bold">Legend:</text>
+
+  <line x1="1300" y1="170" x2="1380" y2="170" class="message"/>
+  <text x="1390" y="175" class="note-text">Synchronous call</text>
+
+  <line x1="1300" y1="190" x2="1380" y2="190" class="return-message"/>
+  <text x="1390" y="195" class="note-text">Return/Response</text>
+
+  <line x1="1300" y1="210" x2="1320" y2="210" class="self-message"/>
+  <line x1="1320" y1="210" x2="1320" y2="220" class="self-message"/>
+  <line x1="1320" y1="220" x2="1300" y2="220" class="self-message"/>
+  <text x="1390" y="217" class="note-text">Self-call/Internal</text>
+
+  <rect x="1295" y="230" width="15" height="25" class="activation"/>
+  <text x="1320" y="245" class="note-text">Activation (Processing)</text>
+
+  <rect x="1295" y="270" width="250" height="30" class="note-box"/>
+  <text x="1305" y="285" class="note-text">Code reference box</text>
+
+  <!-- Total Time Note -->
+  <rect x="1280" y="340" width="280" height="60" fill="#ffebee" stroke="#c62828"/>
+  <text x="1290" y="360" class="note-text" font-weight="bold">Total Connection Time:</text>
+  <text x="1290" y="378" class="note-text">~100-500ms (local guacd)</text>
+  <text x="1290" y="393" class="note-text">Depends on: network latency, SSH server</text>
+</svg>

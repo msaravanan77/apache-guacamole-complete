@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" width="1400" height="900">
+  <defs>
+    <style>
+      .component-box { fill: #e3f2fd; stroke: #1976d2; stroke-width: 2; }
+      .sub-component { fill: #fff3e0; stroke: #f57c00; stroke-width: 1.5; }
+      .protocol-box { fill: #f3e5f5; stroke: #7b1fa2; stroke-width: 1.5; }
+      .title-text { font: bold 16px sans-serif; fill: #000; }
+      .sub-text { font: 12px sans-serif; fill: #333; }
+      .small-text { font: 10px sans-serif; fill: #666; }
+      .arrow { stroke: #333; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .bi-arrow { stroke: #d32f2f; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead-red); marker-start: url(#arrowhead-red-start); }
+      .data-flow { stroke: #388e3c; stroke-width: 2; fill: none; stroke-dasharray: 5,3; marker-end: url(#arrowhead-green); }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333" />
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#d32f2f" />
+    </marker>
+    <marker id="arrowhead-red-start" markerWidth="10" markerHeight="10" refX="1" refY="3" orient="auto">
+      <polygon points="10 0, 0 3, 10 6" fill="#d32f2f" />
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#388e3c" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="700" y="30" text-anchor="middle" class="title-text" font-size="20">Apache Guacamole SSH Architecture Overview</text>
+
+  <!-- Browser Layer -->
+  <rect x="50" y="60" width="300" height="320" class="component-box" rx="5"/>
+  <text x="200" y="85" text-anchor="middle" class="title-text">Browser (HTML5)</text>
+
+  <!-- Angular UI -->
+  <rect x="70" y="100" width="260" height="60" class="sub-component" rx="3"/>
+  <text x="200" y="125" text-anchor="middle" class="sub-text">Angular UI</text>
+  <text x="200" y="145" text-anchor="middle" class="small-text">connectionService.js</text>
+
+  <!-- Guacamole Client -->
+  <rect x="70" y="175" width="260" height="80" class="sub-component" rx="3"/>
+  <text x="200" y="200" text-anchor="middle" class="sub-text">Guacamole Client (JS)</text>
+  <text x="200" y="220" text-anchor="middle" class="small-text">Client.js - Protocol handler</text>
+  <text x="200" y="237" text-anchor="middle" class="small-text">Display.js - HTML5 Canvas</text>
+
+  <!-- WebSocket Tunnel -->
+  <rect x="70" y="270" width="260" height="95" class="sub-component" rx="3"/>
+  <text x="200" y="295" text-anchor="middle" class="sub-text">WebSocket Tunnel</text>
+  <text x="200" y="315" text-anchor="middle" class="small-text">Tunnel.js - WebSocket</text>
+  <text x="200" y="332" text-anchor="middle" class="small-text">Parser.js - Protocol parser</text>
+  <text x="200" y="349" text-anchor="middle" class="small-text">ws://host/websocket-tunnel</text>
+
+  <!-- Java Backend Layer -->
+  <rect x="450" y="60" width="450" height="320" class="component-box" rx="5"/>
+  <text x="675" y="85" text-anchor="middle" class="title-text">Java Backend (Tomcat/Jetty)</text>
+
+  <!-- REST API -->
+  <rect x="470" y="100" width="200" height="70" class="sub-component" rx="3"/>
+  <text x="570" y="125" text-anchor="middle" class="sub-text">REST API</text>
+  <text x="570" y="145" text-anchor="middle" class="small-text">ConnectionResource.java</text>
+  <text x="570" y="160" text-anchor="middle" class="small-text">AuthenticationService.java</text>
+
+  <!-- WebSocket Endpoint -->
+  <rect x="690" y="100" width="195" height="70" class="sub-component" rx="3"/>
+  <text x="787" y="120" text-anchor="middle" class="sub-text">WebSocket Handler</text>
+  <text x="787" y="138" text-anchor="middle" class="small-text">RestrictedGuacamole</text>
+  <text x="787" y="154" text-anchor="middle" class="small-text">WebSocketTunnelEndpoint.java</text>
+
+  <!-- Tunnel Service -->
+  <rect x="470" y="185" width="415" height="80" class="sub-component" rx="3"/>
+  <text x="677" y="210" text-anchor="middle" class="sub-text">Tunnel Request Service</text>
+  <text x="677" y="230" text-anchor="middle" class="small-text">TunnelRequestService.java - Session management</text>
+  <text x="677" y="247" text-anchor="middle" class="small-text">UserContext, GuacamoleConfiguration, Connection retrieval</text>
+
+  <!-- Socket to guacd -->
+  <rect x="470" y="280" width="415" height="85" class="sub-component" rx="3"/>
+  <text x="677" y="305" text-anchor="middle" class="sub-text">TCP Socket to guacd</text>
+  <text x="677" y="325" text-anchor="middle" class="small-text">InetGuacamoleSocket.java - TCP connection</text>
+  <text x="677" y="342" text-anchor="middle" class="small-text">ConfiguredGuacamoleSocket.java - Protocol handshake</text>
+  <text x="677" y="357" text-anchor="middle" class="small-text">localhost:4822 (default)</text>
+
+  <!-- Guacamole Protocol Box -->
+  <rect x="380" y="410" width="600" height="60" class="protocol-box" rx="5"/>
+  <text x="680" y="430" text-anchor="middle" class="sub-text">Guacamole Protocol (Text-based, length-prefixed)</text>
+  <text x="680" y="448" text-anchor="middle" class="small-text">select,ssh; size,1920,1080,96; connect,hostname,port,user,pass,...; ready,conn-id;</text>
+  <text x="680" y="463" text-anchor="middle" class="small-text">key,keysym,pressed; png,layer,x,y,data; sync,timestamp;</text>
+
+  <!-- guacd Daemon Layer -->
+  <rect x="50" y="500" width="420" height="350" class="component-box" rx="5"/>
+  <text x="260" y="525" text-anchor="middle" class="title-text">guacd (C Daemon)</text>
+
+  <!-- Daemon Core -->
+  <rect x="70" y="540" width="180" height="80" class="sub-component" rx="3"/>
+  <text x="160" y="565" text-anchor="middle" class="sub-text">Daemon Core</text>
+  <text x="160" y="585" text-anchor="middle" class="small-text">daemon.c - Accept</text>
+  <text x="160" y="602" text-anchor="middle" class="small-text">connection.c - Route</text>
+
+  <!-- Process Manager -->
+  <rect x="270" y="540" width="180" height="80" class="sub-component" rx="3"/>
+  <text x="360" y="565" text-anchor="middle" class="sub-text">Process Manager</text>
+  <text x="360" y="585" text-anchor="middle" class="small-text">proc.c - Fork & exec</text>
+  <text x="360" y="602" text-anchor="middle" class="small-text">proc-map.c - Track</text>
+
+  <!-- SSH Plugin -->
+  <rect x="70" y="635" width="380" height="100" class="sub-component" rx="3"/>
+  <text x="260" y="660" text-anchor="middle" class="sub-text">SSH Plugin (libguac-client-ssh.so)</text>
+  <text x="260" y="680" text-anchor="middle" class="small-text">client.c - Plugin init | user.c - User join handler</text>
+  <text x="260" y="697" text-anchor="middle" class="small-text">ssh.c - ssh_client_thread() - Main SSH connection logic</text>
+  <text x="260" y="714" text-anchor="middle" class="small-text">input.c - Keyboard/mouse handlers</text>
+
+  <!-- Terminal Emulator -->
+  <rect x="70" y="750" width="180" height="85" class="sub-component" rx="3"/>
+  <text x="160" y="775" text-anchor="middle" class="sub-text">Terminal Emulator</text>
+  <text x="160" y="795" text-anchor="middle" class="small-text">terminal.c - VT102/220</text>
+  <text x="160" y="812" text-anchor="middle" class="small-text">display.c - Pango/Cairo</text>
+
+  <!-- libguac -->
+  <rect x="270" y="750" width="180" height="85" class="sub-component" rx="3"/>
+  <text x="360" y="775" text-anchor="middle" class="sub-text">libguac Core</text>
+  <text x="360" y="795" text-anchor="middle" class="small-text">protocol.c - Instructions</text>
+  <text x="360" y="812" text-anchor="middle" class="small-text">socket.c - I/O</text>
+
+  <!-- SSH Libraries -->
+  <rect x="520" y="500" width="380" height="150" class="component-box" rx="5"/>
+  <text x="710" y="525" text-anchor="middle" class="title-text">SSH Libraries</text>
+
+  <rect x="540" y="545" width="160" height="90" class="sub-component" rx="3"/>
+  <text x="620" y="570" text-anchor="middle" class="sub-text">libssh2</text>
+  <text x="620" y="590" text-anchor="middle" class="small-text">SSH protocol</text>
+  <text x="620" y="607" text-anchor="middle" class="small-text">Channel management</text>
+  <text x="620" y="622" text-anchor="middle" class="small-text">Authentication</text>
+
+  <rect x="720" y="545" width="160" height="90" class="sub-component" rx="3"/>
+  <text x="800" y="570" text-anchor="middle" class="sub-text">OpenSSL / gcrypt</text>
+  <text x="800" y="590" text-anchor="middle" class="small-text">Encryption</text>
+  <text x="800" y="607" text-anchor="middle" class="small-text">Key management</text>
+
+  <!-- Target SSH Server -->
+  <rect x="520" y="680" width="380" height="170" class="component-box" rx="5"/>
+  <text x="710" y="705" text-anchor="middle" class="title-text">Target SSH Server</text>
+
+  <rect x="540" y="720" width="340" height="60" class="sub-component" rx="3"/>
+  <text x="710" y="745" text-anchor="middle" class="sub-text">SSH Server (sshd)</text>
+  <text x="710" y="765" text-anchor="middle" class="small-text">192.168.1.10:22</text>
+
+  <rect x="540" y="795" width="340" height="40" class="sub-component" rx="3"/>
+  <text x="710" y="820" text-anchor="middle" class="sub-text">Shell (bash/zsh/sh)</text>
+
+  <!-- Connections -->
+
+  <!-- Browser to Java WebSocket -->
+  <path d="M 200,365 L 200,390 L 675,390 L 675,170" class="bi-arrow"/>
+  <text x="430" y="405" text-anchor="middle" class="small-text">WebSocket (Guacamole Protocol)</text>
+
+  <!-- Java to guacd -->
+  <path d="M 675,365 L 675,390 L 260,390 L 260,500" class="bi-arrow"/>
+  <text x="465" y="448" text-anchor="middle" class="small-text">TCP Socket</text>
+
+  <!-- guacd SSH Plugin to libssh2 -->
+  <path d="M 450,700 L 540,590" class="arrow"/>
+  <text x="485" y="640" text-anchor="middle" class="small-text" font-size="9">Uses</text>
+
+  <!-- libssh2 to SSH Server -->
+  <path d="M 700,590 L 700,720" class="bi-arrow"/>
+  <text x="720" y="660" text-anchor="middle" class="small-text">SSH Protocol</text>
+  <text x="720" y="675" text-anchor="middle" class="small-text">Port 22/TCP</text>
+
+  <!-- Terminal to Protocol -->
+  <path d="M 250,792 L 270,792" class="arrow"/>
+  <text x="260" y="810" text-anchor="middle" class="small-text" font-size="9" transform="rotate(-90 260 800)">Generates</text>
+
+  <!-- Data Flow Labels -->
+  <text x="50" y="895" class="sub-text" font-weight="bold">Data Flows:</text>
+  <line x1="160" y1="890" x2="220" y2="890" class="bi-arrow"/>
+  <text x="240" y="895" class="small-text">Bidirectional (Input & Output)</text>
+
+  <line x1="400" y1="890" x2="460" y2="890" class="arrow"/>
+  <text x="480" y="895" class="small-text">Unidirectional</text>
+
+  <!-- Component Labels -->
+  <text x="950" y="70" class="sub-text" font-weight="bold">Key Files:</text>
+  <text x="950" y="95" class="small-text">Browser: Client.js, Tunnel.js, Display.js</text>
+  <text x="950" y="115" class="small-text">Java: TunnelRequestService.java</text>
+  <text x="950" y="135" class="small-text">Java: InetGuacamoleSocket.java</text>
+  <text x="950" y="155" class="small-text">guacd: daemon.c, connection.c, proc.c</text>
+  <text x="950" y="175" class="small-text">SSH: client.c, user.c, ssh.c, input.c</text>
+  <text x="950" y="195" class="small-text">Terminal: terminal.c, display.c</text>
+
+  <text x="950" y="225" class="sub-text" font-weight="bold">Protocol Layers:</text>
+  <text x="950" y="250" class="small-text">1. WebSocket (Browser ↔ Java)</text>
+  <text x="950" y="270" class="small-text">2. Guacamole Protocol (Java ↔ guacd)</text>
+  <text x="950" y="290" class="small-text">3. SSH Protocol (guacd ↔ SSH Server)</text>
+</svg>
